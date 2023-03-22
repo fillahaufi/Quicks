@@ -4,6 +4,7 @@ import { useState } from "react";
 import ChatList from "../components/Chat/ChatList";
 import OpenBox from "../components/OpenBox";
 import QButton from "../components/QButton";
+import TaskList from "../components/Task/TaskList";
 
 type QuickButtonStatus = "none" | "quick" | "inbox" | "task";
 
@@ -110,7 +111,7 @@ export default function Home() {
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "inbox"
                                     ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-0 h-0"
+                                    : "opacity-0 bottom-10 right-10 w-3 h-3"
                             }`}>
                             {quickStatus === "inbox" ? <ChatList /> : <></>}
                         </OpenBox>
@@ -162,9 +163,9 @@ export default function Home() {
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "task"
                                     ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-0 h-0"
+                                    : "opacity-0 bottom-10 right-10 w-3 h-3"
                             }`}>
-                            <div></div>
+                            {quickStatus === "task" ? <TaskList /> : <></>}
                         </OpenBox>
                         <p
                             className={`font-bold ease-in-out duration-200 ${
