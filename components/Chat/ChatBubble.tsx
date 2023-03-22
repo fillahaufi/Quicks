@@ -12,7 +12,14 @@ const ChatBubble: React.FC<Props> = props => {
             className={`flex flex-col px-5 mb-3 ${
                 props.isMe ? "text-right" : "text-left"
             }`}>
-            <h1 className={`${"text-txt-chat-" + props.color} font-bold`}>
+            <h1
+                className={`${
+                    props.color == "orange"
+                        ? "text-txt-chat-orange"
+                        : props.color == "green"
+                        ? "text-txt-chat-green"
+                        : "text-txt-chat-purple"
+                } font-bold`}>
                 {props.msg.user.id == "current" ? "You" : props.msg.user.name}
             </h1>
             <div
@@ -21,13 +28,17 @@ const ChatBubble: React.FC<Props> = props => {
                 }`}>
                 <div
                     className={`rounded-md p-3 ${
-                        "bg-bubble-chat-" + props.color
+                        props.color == "orange"
+                            ? "bg-bubble-chat-orange"
+                            : props.color == "green"
+                            ? "bg-bubble-chat-green"
+                            : "bg-bubble-chat-purple"
                     } max-w-xl ${props.isMe ? "text-right" : "text-left"}`}>
                     <p className="text-txt-default">{props.msg.text}</p>
                     <p className="text-txt-default text-sm mt-3">
-                        {props.msg.createdAt.getHours() +
+                        {new Date(props.msg.createdAt).getHours() +
                             ":" +
-                            props.msg.createdAt.getMinutes()}
+                            new Date(props.msg.createdAt).getMinutes()}
                     </p>
                 </div>
                 <button className="btn px-1 bg-transparent hover:bg-transparent border-transparent hover:border-transparent h-3 min-h-[1px]">

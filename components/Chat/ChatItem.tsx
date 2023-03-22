@@ -59,9 +59,11 @@ const ChatItem: React.FC<Props> = props => {
             </div>
             <div>
                 <p>
-                    {props.chat.messages[
-                        props.chat.messages.length - 1
-                    ].createdAt.toLocaleString()}
+                    {new Date(
+                        props.chat.messages[
+                            props.chat.messages.length - 1
+                        ].createdAt,
+                    ).toLocaleString()}
                 </p>
             </div>
         </div>

@@ -47,7 +47,7 @@ const ChatRoom: React.FC<Props> = props => {
         return uniqueUsers.length;
     };
     return (
-        <div className="grid grid-cols-1 w-full">
+        <div className="flex flex-col w-full h-full">
             <div className="flex flex-row w-full p-5">
                 <button
                     className="btn btn-circle bg-transparent border-transparent hover:bg-slate-200 hover:border-transparent"
@@ -101,21 +101,35 @@ const ChatRoom: React.FC<Props> = props => {
                     fill="#BDBDBD"
                 />
             </svg>
-            {userColor.length > 0
-                ? props.chat.messages.map(message => (
-                      <ChatBubble
-                          key={message.id}
-                          isMe={message.user.id == "current"}
-                          msg={message}
-                          color={
-                              userColor.find(
-                                  userColor =>
-                                      userColor.user.id == message.user.id,
-                              )?.color || "purple"
-                          }
-                      />
-                  ))
-                : null}
+            <div className="flex-auto overflow-y-auto">
+                {userColor.length == countUser() ? (
+                    props.chat.messages.map(message => (
+                        <ChatBubble
+                            key={message.id}
+                            isMe={message.user.id == "current"}
+                            msg={message}
+                            color={
+                                userColor.find(
+                                    userColor =>
+                                        userColor.user.id === message.user.id,
+                                )?.color || "orange"
+                            }
+                        />
+                    ))
+                ) : (
+                    <div>lalala</div>
+                )}
+            </div>
+            <div className="flex flex-row p-5" data-theme="light">
+                <input
+                    type="text"
+                    placeholder="Type a new message"
+                    className="input input-bordered flex-auto"
+                />
+                <button className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue ml-3">
+                    Send
+                </button>
+            </div>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatItem from "./ChatItem";
 import ChatRoom from "./ChatRoom";
 
@@ -7,49 +7,21 @@ type Props = {
 };
 
 const ChatList: React.FC<Props> = props => {
-    const chatList: Chat[] = [
-        {
-            id: 1,
-            name: "Naturalization",
-            messages: [
-                {
-                    id: 1,
-                    text: "Hello Guys!",
-                    createdAt: new Date("2021-06-01 8:45"),
-                    user: {
-                        id: "current",
-                        name: "Aufi",
-                    },
-                },
-                {
-                    id: 2,
-                    text: "Hello",
-                    createdAt: new Date("2021-06-02 10:45"),
-                    user: {
-                        id: 1,
-                        name: "John Doe",
-                    },
-                },
-            ],
-        },
-        {
-            id: 2,
-            name: "Citizenship",
-            messages: [
-                {
-                    id: 1,
-                    text: "Hello",
-                    createdAt: new Date("2021-06-03 12:45"),
-                    user: {
-                        id: 2,
-                        name: "Daniel Smith",
-                    },
-                },
-            ],
-        },
-    ];
-
+    const [chatList, setChatList] = React.useState<Chat[]>([]);
     const [activeChat, setActiveChat] = React.useState<Chat | null>(null);
+
+    useEffect(() => {
+        getAllChats();
+    }, []);
+
+    const getAllChats = async () => {
+        const result = await fetch(
+            "https://private-8480be-quicks.apiary-mock.com/chats",
+        );
+        const data = await result.json();
+        // console.log(data);
+        setChatList(data);
+    };
 
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
@@ -59,7 +31,7 @@ const ChatList: React.FC<Props> = props => {
         <ChatRoom chat={activeChat} onBackClick={() => setActiveChat(null)} />
     ) : (
         <div
-            className={`px-8 pt-6 grid grid-cols-1 ${props.className}`}
+            className={`px-8 pt-6 flex flex-col ${props.className}`}
             data-theme="light">
             <div className="mb-1">
                 <input
@@ -83,28 +55,39 @@ const ChatList: React.FC<Props> = props => {
                     />
                 </svg>
             </div>
-            {chatList.map((chat, index) => (
-                <div key={chat.id}>
-                    <ChatItem chat={chat} onClick={() => setActiveChat(chat)} />
-                    {index !== chatList.length - 1 ? (
-                        <svg
-                            className="w-full"
-                            height="2"
-                            viewBox="0 0 706 2"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M706 1.50006L-8.74228e-08 1.5L0 0.5L706 0.500062L706 1.50006Z"
-                                fill="#BDBDBD"
-                            />
-                        </svg>
-                    ) : (
-                        <></>
-                    )}
+            {chatList.length > 0 ? (
+                chatList.map((chat, index) => (
+                    <div key={chat.id}>
+                        <ChatItem
+                            chat={chat}
+                            onClick={() => setActiveChat(chat)}
+                        />
+                        {index !== chatList.length - 1 ? (
+                            <svg
+                                className="w-full"
+                                height="2"
+                                viewBox="0 0 706 2"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M706 1.50006L-8.74228e-08 1.5L0 0.5L706 0.500062L706 1.50006Z"
+                                    fill="#BDBDBD"
+                                />
+                            </svg>
+                        ) : (
+                            <></>
+                        )}
+                    </div>
+                ))
+            ) : (
+                <div className="w-full h-full">
+                    <div className="absolute top-1/2 left-0 w-full text-center">
+                        <p>Loading chats...</p>
+                    </div>
                 </div>
-            ))}
+            )}
         </div>
     );
 };

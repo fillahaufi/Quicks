@@ -1,10 +1,9 @@
 import Head from "next/head";
 // import Image from "next/image";
 import { useState } from "react";
-import QButton from "../components/QButton";
-import styles from "../styles/Home.module.css";
-import OpenBox from "../components/OpenBox";
 import ChatList from "../components/Chat/ChatList";
+import OpenBox from "../components/OpenBox";
+import QButton from "../components/QButton";
 
 type QuickButtonStatus = "none" | "quick" | "inbox" | "task";
 
@@ -40,7 +39,7 @@ export default function Home() {
     };
 
     return (
-        <div className={styles.container} data-theme="dark">
+        <div data-theme="dark">
             <Head>
                 <title>Quicks</title>
                 <meta
@@ -50,7 +49,31 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className={styles.main}>
+            <main className={"flex flex-row h-screen w-full"}>
+                <div className="w-1/5 border-r-2 border-slate-400"></div>
+                <div className="flex-auto">
+                    <div className="flex flex-row bg-slate-700 h-fit items-center">
+                        <svg
+                            className="mx-3"
+                            width="23"
+                            height="22"
+                            viewBox="0 0 13 12"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M8.71143 7.54717H9.25345L12.6771 10.9777L11.6548 12L8.22429 8.57633V8.03431L8.03905 7.8422C7.25688 8.51458 6.24145 8.91938 5.13682 8.91938C2.67369 8.91938 0.677124 6.92281 0.677124 4.45969C0.677124 1.99657 2.67369 0 5.13682 0C7.59994 0 9.59651 1.99657 9.59651 4.45969C9.59651 5.56432 9.1917 6.57976 8.51932 7.36192L8.71143 7.54717ZM2.04933 4.4597C2.04933 6.16811 3.42841 7.54718 5.13681 7.54718C6.84522 7.54718 8.22429 6.16811 8.22429 4.4597C8.22429 2.7513 6.84522 1.37222 5.13681 1.37222C3.42841 1.37222 2.04933 2.7513 2.04933 4.4597Z"
+                                fill="rgb(148 163 184 / 100%)"
+                            />
+                        </svg>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            className="input rounded-none flex-auto bg-slate-700"
+                        />
+                    </div>
+                </div>
                 <div className="absolute bottom-5 right-5">
                     <QButton
                         onclick={setActiveState}
@@ -89,7 +112,7 @@ export default function Home() {
                                     ? "opacity-100 bottom-20 right-0"
                                     : "opacity-0 bottom-10 right-10 w-0 h-0"
                             }`}>
-                            <ChatList />
+                            {quickStatus === "inbox" ? <ChatList /> : <></>}
                         </OpenBox>
                         <p
                             className={`font-bold ease-in-out duration-200 ${
