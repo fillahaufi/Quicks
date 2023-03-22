@@ -4,6 +4,7 @@ import { useState } from "react";
 import QButton from "../components/QButton";
 import styles from "../styles/Home.module.css";
 import OpenBox from "../components/OpenBox";
+import ChatList from "../components/Chat/ChatList";
 
 type QuickButtonStatus = "none" | "quick" | "inbox" | "task";
 
@@ -83,12 +84,13 @@ export default function Home() {
                                 : "opacity-100 right-24 z-0"
                         }`}>
                         <OpenBox
-                            className={`absolute right-0 ease-in-out duration-300 -z-10 ${
+                            className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "inbox"
-                                    ? "opacity-100 bottom-20"
-                                    : "opacity-0 bottom-0 w-5 h-5"
-                            }`}
-                        />
+                                    ? "opacity-100 bottom-20 right-0"
+                                    : "opacity-0 bottom-10 right-10 w-1 h-1"
+                            }`}>
+                            <ChatList />
+                        </OpenBox>
                         <p
                             className={`font-bold ease-in-out duration-200 ${
                                 quickStatus === "quick"
@@ -134,12 +136,13 @@ export default function Home() {
                                 : "opacity-100 right-44 z-0"
                         }`}>
                         <OpenBox
-                            className={`absolute right-0 ease-in-out duration-300 -z-10 ${
+                            className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "task"
-                                    ? "opacity-100 bottom-20"
-                                    : "opacity-0 bottom-0 w-5 h-5"
-                            }`}
-                        />
+                                    ? "opacity-100 bottom-20 right-0"
+                                    : "opacity-0 bottom-10 right-10 w-1 h-1"
+                            }`}>
+                            <div></div>
+                        </OpenBox>
                         <p
                             className={`font-bold ease-in-out duration-200 ${
                                 quickStatus === "quick"
