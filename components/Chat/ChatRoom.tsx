@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 
 type Props = {
@@ -7,6 +7,38 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = props => {
+    useEffect(() => {
+        assignColorToEachUser();
+    }, []);
+
+    const [userColor, setUserColor] = React.useState<
+        | {
+              user: User;
+              color: string;
+          }[]
+        | []
+    >([]);
+
+    const assignColorToEachUser = () => {
+        const users = props.chat.messages.map(message => message.user);
+        console.log("users", users);
+        const uniqueUsers = users.filter((user, index) => {
+            return users.indexOf(user) === index;
+        });
+        console.log("uniqueUsers", uniqueUsers);
+        const colors = ["orange", "green"];
+        const randNum = Math.floor(Math.random() * 2);
+        const userColor = uniqueUsers.map(user => {
+            return {
+                user,
+                color: user.id == "current" ? "purple" : colors[randNum],
+            };
+        });
+        console.log("userColor", userColor);
+        setUserColor(userColor);
+        console.log("userColorFinal", userColor);
+    };
+
     const countUser = () => {
         const users = props.chat.messages.map(message => message.user);
         const uniqueUsers = users.filter((user, index) => {
@@ -63,14 +95,27 @@ const ChatRoom: React.FC<Props> = props => {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M706 1.50006L-8.74228e-08 1.5L0 0.5L706 0.500062L706 1.50006Z"
                     fill="#BDBDBD"
                 />
             </svg>
-            <ChatBubble isMe={true} />
-            <ChatBubble isMe={false} />
+            {userColor.length > 0
+                ? props.chat.messages.map(message => (
+                      <ChatBubble
+                          key={message.id}
+                          isMe={message.user.id == "current"}
+                          msg={message}
+                          color={
+                              userColor.find(
+                                  userColor =>
+                                      userColor.user.id == message.user.id,
+                              )?.color || "purple"
+                          }
+                      />
+                  ))
+                : null}
         </div>
     );
 };

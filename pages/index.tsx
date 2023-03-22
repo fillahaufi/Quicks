@@ -87,7 +87,7 @@ export default function Home() {
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "inbox"
                                     ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-1 h-1"
+                                    : "opacity-0 bottom-10 right-10 w-0 h-0"
                             }`}>
                             <ChatList />
                         </OpenBox>
@@ -139,7 +139,7 @@ export default function Home() {
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "task"
                                     ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-1 h-1"
+                                    : "opacity-0 bottom-10 right-10 w-0 h-0"
                             }`}>
                             <div></div>
                         </OpenBox>

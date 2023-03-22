@@ -14,6 +14,15 @@ const ChatList: React.FC<Props> = props => {
             messages: [
                 {
                     id: 1,
+                    text: "Hello Guys!",
+                    createdAt: new Date("2021-06-01 8:45"),
+                    user: {
+                        id: "current",
+                        name: "Aufi",
+                    },
+                },
+                {
+                    id: 2,
                     text: "Hello",
                     createdAt: new Date("2021-06-02 10:45"),
                     user: {
@@ -85,8 +94,8 @@ const ChatList: React.FC<Props> = props => {
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
                                 d="M706 1.50006L-8.74228e-08 1.5L0 0.5L706 0.500062L706 1.50006Z"
                                 fill="#BDBDBD"
                             />
