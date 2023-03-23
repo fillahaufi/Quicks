@@ -21,3 +21,11 @@ declare type MailBox = {
     name: string;
     chats: Chat[];
 };
+
+declare type Task = {
+    id: number;
+    title: string;
+    description: string;
+    deadline: Date;
+    completed: boolean;
+};

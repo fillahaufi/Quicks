@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import TaskItem from "./TaskItem";
 
 const TaskList = () => {
     const [showOptions, setShowOptions] = React.useState(false);
+    const [taskList, setTaskList] = React.useState<Task[]>([]);
+
+    useEffect(() => {
+        getAllTasks();
+    }, []);
+
+    const getAllTasks = async () => {
+        const result = await fetch(
+            "https://private-8480be-quicks.apiary-mock.com/tasks",
+        );
+        const data = await result.json();
+        // console.log(data);
+        setTaskList(data);
+    };
     return (
-        <div className="flex flex-col w-full h-full p-5" data-theme="light">
-            <div className="flex flex-row">
+        <div
+            className="flex flex-col w-full h-full p-5 rounded-md"
+            data-theme="light">
+            <div className="flex flex-row mb-5">
                 <div className="">
                     <button
-                        className="btn bg-white hover:bg-slate-300 text-black min-h-0 h-11"
+                        className="btn bg-white hover:bg-slate-300 text-black min-h-0 h-11 ml-20"
                         onClick={() => setShowOptions(!showOptions)}>
                         My Tasks{" "}
                         <span className="ml-3">
@@ -25,7 +42,7 @@ const TaskList = () => {
                         </span>
                     </button>
                     <div
-                        className={`flex flex-col w-72 mt-2 duration-200 ease-in-out ${
+                        className={`absolute flex flex-col w-72 mt-2 duration-200 ease-in-out ${
                             showOptions
                                 ? "opacity-100"
                                 : "opacity-0 pointer-events-none"
@@ -42,6 +59,17 @@ const TaskList = () => {
                     New Task
                 </button>
             </div>
+            <div>
+                {taskList.length > 0 ? (
+                    taskList.map(task => {
+                        return <TaskItem key={task.id} task={task} />;
+                    })
+                ) : (
+                    <></>
+                )}
+            </div>
+            {/* <TaskItem /> */}
+            {/* <TaskItem /> */}
         </div>
     );
 };

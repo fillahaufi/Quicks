@@ -31,7 +31,7 @@ const ChatList: React.FC<Props> = props => {
         <ChatRoom chat={activeChat} onBackClick={() => setActiveChat(null)} />
     ) : (
         <div
-            className={`px-8 pt-6 flex flex-col ${props.className}`}
+            className={`px-8 pt-6 flex flex-col rounded-md ${props.className}`}
             data-theme="light">
             <div className="mb-1">
                 <input

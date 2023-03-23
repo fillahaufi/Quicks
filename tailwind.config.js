@@ -20,6 +20,9 @@ module.exports = {
                 "txt-chat-orange": "#E5A443",
                 "txt-chat-green": "#43B78D",
             },
+            transitionProperty: {
+                height: "height",
+            },
         },
     },
     daisyui: {
