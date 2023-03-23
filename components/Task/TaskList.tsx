@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import TaskItem from "./TaskItem";
+import Loading from "../Loading";
 
 const TaskList = () => {
     const [showOptions, setShowOptions] = React.useState(false);
@@ -65,11 +66,9 @@ const TaskList = () => {
                         return <TaskItem key={task.id} task={task} />;
                     })
                 ) : (
-                    <></>
+                    <Loading loadWhat={"tasks"} />
                 )}
             </div>
-            {/* <TaskItem /> */}
-            {/* <TaskItem /> */}
         </div>
     );
 };

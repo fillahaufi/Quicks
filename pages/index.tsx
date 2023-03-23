@@ -110,8 +110,8 @@ export default function Home() {
                         <OpenBox
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "inbox"
-                                    ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-3 h-3"
+                                    ? "opacity-100 bottom-20 right-0 max-w-[1000px] max-h-[1000px]"
+                                    : "opacity-0 bottom-10 right-10 max-w-0 max-h-0"
                             }`}>
                             {quickStatus === "inbox" ? <ChatList /> : <></>}
                         </OpenBox>
@@ -162,8 +162,8 @@ export default function Home() {
                         <OpenBox
                             className={`absolute ease-in-out duration-300 -z-10 ${
                                 quickStatus === "task"
-                                    ? "opacity-100 bottom-20 right-0"
-                                    : "opacity-0 bottom-10 right-10 w-3 h-3"
+                                    ? "opacity-100 bottom-20 right-0 10 max-w-[1000px] max-h-[1000px]"
+                                    : "opacity-0 bottom-10 right-10 max-w-0 max-h-0"
                             }`}>
                             {quickStatus === "task" ? <TaskList /> : <></>}
                         </OpenBox>

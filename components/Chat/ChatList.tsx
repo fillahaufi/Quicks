@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import ChatItem from "./ChatItem";
 import ChatRoom from "./ChatRoom";
+import Loading from "../Loading";
 
 type Props = {
     className?: string;
@@ -82,11 +83,7 @@ const ChatList: React.FC<Props> = props => {
                     </div>
                 ))
             ) : (
-                <div className="w-full h-full">
-                    <div className="absolute top-1/2 left-0 w-full text-center">
-                        <p>Loading chats...</p>
-                    </div>
-                </div>
+                <Loading loadWhat={"chats"} />
             )}
         </div>
     );
