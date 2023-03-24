@@ -4,6 +4,7 @@ type Props = {
     isMe: boolean;
     msg: Message;
     color: string;
+    setIsReply?: (isReply: boolean) => void;
 };
 
 const ChatBubble: React.FC<Props> = props => {
@@ -61,18 +62,38 @@ const ChatBubble: React.FC<Props> = props => {
                             />
                         </svg>
                     </button>
-                    {options && (
-                        <div
-                            className="absolute flex flex-col w-32"
-                            data-theme="light">
-                            <button className="btn bg-white hover:bg-slate-300 text-quick-blue rounded-b-none min-h-0 h-9">
-                                edit
-                            </button>
-                            <button className="btn bg-white hover:bg-slate-300 text-red-500 rounded-t-none min-h-0 h-9">
-                                delete
-                            </button>
-                        </div>
-                    )}
+                    {options ? (
+                        props.isMe ? (
+                            <div
+                                className="absolute flex flex-col w-32"
+                                data-theme="light">
+                                <button className="btn bg-white hover:bg-slate-300 text-quick-blue rounded-b-none min-h-0 h-9">
+                                    edit
+                                </button>
+                                <button className="btn bg-white hover:bg-slate-300 text-red-500 rounded-t-none min-h-0 h-9">
+                                    delete
+                                </button>
+                            </div>
+                        ) : (
+                            <div
+                                className="absolute flex flex-col w-32"
+                                data-theme="light">
+                                <button className="btn bg-white hover:bg-slate-300 text-quick-blue rounded-b-none min-h-0 h-9">
+                                    Share
+                                </button>
+                                <button
+                                    className="btn bg-white hover:bg-slate-300 text-quick-blue rounded-t-none min-h-0 h-9"
+                                    onClick={() => {
+                                        props.setIsReply &&
+                                            props.setIsReply(true);
+
+                                        setOptions(false);
+                                    }}>
+                                    Reply
+                                </button>
+                            </div>
+                        )
+                    ) : null}
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ const ChatRoom: React.FC<Props> = props => {
           }[]
         | []
     >([]);
+    const [isReply, setIsReply] = React.useState<boolean>(false);
 
     const assignColorToEachUser = () => {
         const users = props.chat.messages.map(message => message.user);
@@ -114,22 +115,71 @@ const ChatRoom: React.FC<Props> = props => {
                                         userColor.user.id === message.user.id,
                                 )?.color || "orange"
                             }
+                            setIsReply={setIsReply}
                         />
                     ))
                 ) : (
-                    <div>lalala</div>
+                    <div>
+                        <h1>loading</h1>
+                    </div>
                 )}
             </div>
             <div className="flex flex-row p-5" data-theme="light">
-                <input
-                    type="text"
-                    placeholder="Type a new message"
-                    className="input input-bordered flex-auto"
-                />
-                <button className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue ml-3">
+                <div className="flex flex-col flex-auto relative">
+                    {isReply && (
+                        <ReplyBubble
+                            className="absolute bottom-11 w-full bg-[#F2F2F2] border-[1px] border-[#828282] rounded-t-md"
+                            onCloseClick={() => setIsReply(false)}
+                        />
+                    )}
+                    <input
+                        type="text"
+                        placeholder="Type a new message"
+                        className={`input input-bordered flex-auto focus:outline-none border-[1px] border-[#828282] ${
+                            isReply ? "rounded-t-none" : "rounded-md"
+                        }`}
+                    />
+                </div>
+                <button className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue ml-3 mt-auto">
                     Send
                 </button>
             </div>
+        </div>
+    );
+};
+
+type ReplyBubbleProps = {
+    className?: string;
+    onCloseClick?: () => void;
+};
+
+const ReplyBubble: React.FC<ReplyBubbleProps> = props => {
+    return (
+        <div className={`p-4 flex flex-col text-left ${props.className}`}>
+            <button
+                className="absolute top-1 right-1 bg-transparent hover:bg-transparent border-transparent btn btn-circle min-h-0 h-9 min-w-0 w-9"
+                onClick={props.onCloseClick}>
+                <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 1.20857L10.7914 0L6 4.79143L1.20857 0L0 1.20857L4.79143 6L0 10.7914L1.20857 12L6 7.20857L10.7914 12L12 10.7914L7.20857 6L12 1.20857Z"
+                        fill="#4F4F4F"
+                    />
+                </svg>
+            </button>
+            <h1 className="font-semibold">
+                Replying to <span></span>
+            </h1>
+            <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
+                quaerat, placeat, maxime nesciunt ad sed excepturi repudiandae
+                explicabo ab, accusantium saepe ipsam. Quos quisquam est,
+                aperiam maiores ullam obcaecati eos!
+            </p>
         </div>
     );
 };
