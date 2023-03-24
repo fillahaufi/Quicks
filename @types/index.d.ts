@@ -10,6 +10,11 @@ declare type Message = {
     user: User;
 };
 
+declare type Reply = {
+    msgId: number;
+    msgReplyId: number;
+};
+
 declare type Chat = {
     id: number;
     name: string;

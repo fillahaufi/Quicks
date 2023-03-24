@@ -3,8 +3,9 @@ import React from "react";
 type Props = {
     isMe: boolean;
     msg: Message;
+    replyMsg: () => Message | null;
     color: string;
-    setIsReply?: (isReply: boolean) => void;
+    setReplyMsg: (msg: Message | null) => void;
 };
 
 const ChatBubble: React.FC<Props> = props => {
@@ -24,6 +25,16 @@ const ChatBubble: React.FC<Props> = props => {
                 } font-bold`}>
                 {props.msg.user.id == "current" ? "You" : props.msg.user.name}
             </h1>
+            {props.replyMsg() ? (
+                <div
+                    className={`max-w-xl p-3 bg-[#F2F2F2] border-[1px] border-[#E0E0E0] mb-1 ${
+                        props.isMe ? "ml-auto" : "ml-0"
+                    }`}>
+                    <p>{props.replyMsg()?.text}</p>
+                    {/* {props.replyMsg() ? 
+                     : null} */}
+                </div>
+            ) : null}
             <div
                 className={`flex ${
                     props.isMe ? "flex-row-reverse" : "flex-row"
@@ -84,8 +95,8 @@ const ChatBubble: React.FC<Props> = props => {
                                 <button
                                     className="btn bg-white hover:bg-slate-300 text-quick-blue rounded-t-none min-h-0 h-9"
                                     onClick={() => {
-                                        props.setIsReply &&
-                                            props.setIsReply(true);
+                                        props.setReplyMsg &&
+                                            props.setReplyMsg(props.msg);
 
                                         setOptions(false);
                                     }}>

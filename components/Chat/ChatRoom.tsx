@@ -7,10 +7,6 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = props => {
-    useEffect(() => {
-        assignColorToEachUser();
-    }, []);
-
     const [userColor, setUserColor] = React.useState<
         | {
               user: User;
@@ -18,15 +14,20 @@ const ChatRoom: React.FC<Props> = props => {
           }[]
         | []
     >([]);
-    const [isReply, setIsReply] = React.useState<boolean>(false);
+
+    const [text, setText] = React.useState<string>("");
+    const [replyMsg, setReplyMsg] = React.useState<Message | null>(null);
+    const [replyMsgsList, setReplyMsgsList] = React.useState<Reply[]>([]);
+
+    useEffect(() => {
+        assignColorToEachUser();
+    }, []);
 
     const assignColorToEachUser = () => {
         const users = props.chat.messages.map(message => message.user);
-        console.log("users", users);
         const uniqueUsers = users.filter((user, index) => {
             return users.indexOf(user) === index;
         });
-        console.log("uniqueUsers", uniqueUsers);
         const colors = ["orange", "green"];
         const randNum = Math.floor(Math.random() * 2);
         const userColor = uniqueUsers.map(user => {
@@ -35,9 +36,7 @@ const ChatRoom: React.FC<Props> = props => {
                 color: user.id == "current" ? "purple" : colors[randNum],
             };
         });
-        console.log("userColor", userColor);
         setUserColor(userColor);
-        console.log("userColorFinal", userColor);
     };
 
     const countUser = () => {
@@ -47,6 +46,37 @@ const ChatRoom: React.FC<Props> = props => {
         });
         return uniqueUsers.length;
     };
+
+    const sendMsg = () => {
+        if (text) {
+            // search for the last message id and add 1 to it to create a new id
+            const id =
+                props.chat.messages[props.chat.messages.length - 1].id + 1;
+
+            props.chat.messages.push({
+                id: id,
+                user: {
+                    id: "current",
+                    name: "Aufi Fillah",
+                },
+                text,
+                createdAt: new Date(),
+            });
+
+            if (replyMsg?.id) {
+                const newRepList: Reply = {
+                    msgId: id,
+                    msgReplyId: replyMsg?.id,
+                };
+
+                setReplyMsgsList([...replyMsgsList, newRepList]);
+            }
+
+            setText("");
+            setReplyMsg(null);
+        }
+    };
+
     return (
         <div className="flex flex-col w-full h-full">
             <div className="flex flex-row w-full p-5">
@@ -103,7 +133,7 @@ const ChatRoom: React.FC<Props> = props => {
                 />
             </svg>
             <div className="flex-auto overflow-y-auto">
-                {userColor.length == countUser() ? (
+                {true ? (
                     props.chat.messages.map(message => (
                         <ChatBubble
                             key={message.id}
@@ -115,7 +145,18 @@ const ChatRoom: React.FC<Props> = props => {
                                         userColor.user.id === message.user.id,
                                 )?.color || "orange"
                             }
-                            setIsReply={setIsReply}
+                            setReplyMsg={setReplyMsg}
+                            replyMsg={() => {
+                                const replyMsgId = replyMsgsList.find(
+                                    replyMsg => replyMsg.msgId === message.id,
+                                )?.msgReplyId;
+                                if (!replyMsgId) return null;
+                                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                                return props.chat.messages.find(
+                                    msg => msg.id === replyMsgId,
+                                )!;
+                            }}
+                            // replyMsg={replyMsgsList ? replyMsgsList : null}
                         />
                     ))
                 ) : (
@@ -126,21 +167,31 @@ const ChatRoom: React.FC<Props> = props => {
             </div>
             <div className="flex flex-row p-5" data-theme="light">
                 <div className="flex flex-col flex-auto relative">
-                    {isReply && (
+                    {replyMsg && (
                         <ReplyBubble
+                            msg={replyMsg}
                             className="absolute bottom-11 w-full bg-[#F2F2F2] border-[1px] border-[#828282] rounded-t-md"
-                            onCloseClick={() => setIsReply(false)}
+                            onCloseClick={() => setReplyMsg(null)}
                         />
                     )}
                     <input
                         type="text"
                         placeholder="Type a new message"
                         className={`input input-bordered flex-auto focus:outline-none border-[1px] border-[#828282] ${
-                            isReply ? "rounded-t-none" : "rounded-md"
+                            replyMsg ? "rounded-t-none" : "rounded-md"
                         }`}
+                        onChange={e => setText(e.target.value)}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") {
+                                sendMsg();
+                            }
+                        }}
+                        value={text}
                     />
                 </div>
-                <button className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue ml-3 mt-auto">
+                <button
+                    className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue ml-3 mt-auto"
+                    onClick={sendMsg}>
                     Send
                 </button>
             </div>
@@ -149,6 +200,7 @@ const ChatRoom: React.FC<Props> = props => {
 };
 
 type ReplyBubbleProps = {
+    msg: Message | null;
     className?: string;
     onCloseClick?: () => void;
 };
@@ -172,14 +224,9 @@ const ReplyBubble: React.FC<ReplyBubbleProps> = props => {
                 </svg>
             </button>
             <h1 className="font-semibold">
-                Replying to <span></span>
+                Replying to <span>{props.msg && props.msg.user.name}</span>
             </h1>
-            <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias
-                quaerat, placeat, maxime nesciunt ad sed excepturi repudiandae
-                explicabo ab, accusantium saepe ipsam. Quos quisquam est,
-                aperiam maiores ullam obcaecati eos!
-            </p>
+            <p>{props.msg && props.msg.text}</p>
         </div>
     );
 };
