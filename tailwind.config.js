@@ -5,6 +5,47 @@ module.exports = {
         "./pages/**/*.{js,ts,jsx,tsx}",
         "./components/**/*.{js,ts,jsx,tsx}",
     ],
+    safelist: [
+        "bg-[#E5F1FF]",
+        "hover:bg-[#E5F1FF]",
+        "border-[#E5F1FF]",
+        "hover:border-[#E5F1FF]",
+
+        "bg-[#FDCFA4]",
+        "hover:bg-[#FDCFA4]",
+        "border-[#FDCFA4]",
+        "hover:border-[#FDCFA4]",
+
+        "bg-[#F9E9C3]",
+        "hover:bg-[#F9E9C3]",
+        "border-[#F9E9C3]",
+        "hover:border-[#F9E9C3]",
+
+        "bg-[#AFEBDB]",
+        "hover:bg-[#AFEBDB]",
+        "border-[#AFEBDB]",
+        "hover:border-[#AFEBDB]",
+
+        "bg-[#CBF1C2]",
+        "hover:bg-[#CBF1C2]",
+        "border-[#CBF1C2]",
+        "hover:border-[#CBF1C2]",
+
+        "bg-[#CFCEF9]",
+        "hover:bg-[#CFCEF9]",
+        "border-[#CFCEF9]",
+        "hover:border-[#CFCEF9]",
+
+        "bg-[#F9E0FD]",
+        "hover:bg-[#F9E0FD]",
+        "border-[#F9E0FD]",
+        "hover:border-[#F9E0FD]",
+
+        "bg-[#9DD0ED]",
+        "hover:bg-[#9DD0ED]",
+        "border-[#9DD0ED]",
+        "hover:border-[#9DD0ED]",
+    ],
     theme: {
         extend: {
             colors: {

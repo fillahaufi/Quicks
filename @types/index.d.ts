@@ -32,5 +32,11 @@ declare type Task = {
     title: string;
     description: string;
     deadline: Date?;
+    stickers: Sticker[];
     completed: boolean;
+};
+
+declare type Sticker = {
+    name: string;
+    bgColor: string;
 };

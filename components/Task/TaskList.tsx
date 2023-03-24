@@ -26,11 +26,12 @@ const TaskList = () => {
             description: "",
             deadline: null,
             completed: false,
+            stickers: [],
         };
         setTaskList([...taskList, newTask]);
     };
 
-    const addTasktoList = (task: Task) => {
+    const updateTask = (task: Task) => {
         const index = taskList.findIndex(t => t.id === task.id);
         const newList = [...taskList];
         newList[index] = task;
@@ -81,14 +82,14 @@ const TaskList = () => {
                     New Task
                 </button>
             </div>
-            <div>
+            <div className="flex-auto overflow-y-auto">
                 {taskList.length > 0 ? (
                     taskList.map(task => {
                         return (
                             <TaskItem
                                 key={task.id}
                                 task={task}
-                                updateTask={addTasktoList}
+                                updateTask={updateTask}
                             />
                         );
                     })

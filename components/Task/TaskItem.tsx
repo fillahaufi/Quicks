@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import StickerList from "./StickerList";
 
 type Props = {
     task: Task;
@@ -9,12 +10,33 @@ const TaskItem: React.FC<Props> = props => {
     const [isComplete, setIsComplete] = React.useState(false);
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const [showOptions, setShowOptions] = React.useState(false);
+    const [showStickerOptions, setShowStickerOptions] = React.useState(false);
 
     useEffect(() => {
         if (props.task.title === "") {
             setIsCollapsed(false);
         }
     }, []);
+
+    const addorRemoveStickerToTask = (sticker: Sticker) => {
+        const { task, updateTask } = props;
+
+        if (task.stickers) {
+            console.log("Before modification: ", task.stickers);
+            if (task.stickers.some(s => s.name === sticker.name)) {
+                task.stickers = task.stickers.filter(
+                    s => s.name !== sticker.name,
+                );
+            } else {
+                task.stickers.push(sticker);
+            }
+            console.log("After modification: ", task.stickers);
+        } else {
+            task.stickers = [sticker];
+        }
+
+        updateTask && updateTask(task);
+    };
 
     return (
         <div className="flex flex-col mt-4" data-theme="light">
@@ -204,7 +226,7 @@ const TaskItem: React.FC<Props> = props => {
                             className="textarea textarea-ghost textarea-xs w-full max-w-xl"
                             rows={1}
                             value={props.task.description}
-                            onChange={(e: { target: { value: any } }) => {
+                            onChange={(e: { target: { value: string } }) => {
                                 if (props && props.updateTask) {
                                     props.updateTask({
                                         ...props.task,
@@ -212,6 +234,48 @@ const TaskItem: React.FC<Props> = props => {
                                     });
                                 }
                             }}></textarea>
+                    </div>
+                    <div className="flex flex-col -ml-3">
+                        <div className="flex flex-row items-center pl-3 gap-5 bg-[#F9F9F9] rounded-md">
+                            <div>
+                                <svg
+                                    width="15"
+                                    height="20"
+                                    viewBox="0 0 15 20"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M13.4032 0.833374H5.52334C4.65742 0.833374 3.95681 1.58337 3.95681 2.50004H11.8288C12.6947 2.50004 13.4032 3.25004 13.4032 4.16671V15L14.9776 15.8334V2.50004C14.9776 1.58337 14.2691 0.833374 13.4032 0.833374ZM10.2545 5.83337V16.6417L6.94038 15.1334L6.31849 14.85L5.69661 15.1334L2.38249 16.6417V5.83337H10.2545ZM2.38245 4.16671H10.2545C11.1204 4.16671 11.8289 4.91671 11.8289 5.83337V19.1667L6.31845 16.6667L0.808044 19.1667V5.83337C0.808044 4.91671 1.51653 4.16671 2.38245 4.16671Z"
+                                        fill="#2F80ED"
+                                    />
+                                </svg>
+                            </div>
+                            <button
+                                className="btn flex flex-row gap-1 w-full min-h-0 bg-transparent hover:bg-transparent border-transparent hover:border-transparent justify-start normal-case"
+                                onClick={() =>
+                                    setShowStickerOptions(!showStickerOptions)
+                                }>
+                                {props.task.stickers
+                                    ? props.task.stickers.map((sticker, i) => (
+                                          <div
+                                              key={i}
+                                              className={`rounded-md text-[#4F4F4F] bg-[${sticker.bgColor}] px-3 py-2`}>
+                                              <p>{sticker.name}</p>
+                                          </div>
+                                      ))
+                                    : null}
+                            </button>
+                        </div>
+                        {showStickerOptions && (
+                            <StickerList
+                                activeStickers={props.task.stickers}
+                                addorRemoveStickerToTask={
+                                    addorRemoveStickerToTask
+                                }
+                            />
+                        )}
                     </div>
                 </div>
             </div>
