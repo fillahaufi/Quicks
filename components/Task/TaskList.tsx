@@ -18,6 +18,25 @@ const TaskList = () => {
         // console.log(data);
         setTaskList(data);
     };
+
+    const addBlankTask = () => {
+        const newTask: Task = {
+            id: taskList.length + 1,
+            title: "",
+            description: "",
+            deadline: null,
+            completed: false,
+        };
+        setTaskList([...taskList, newTask]);
+    };
+
+    const addTasktoList = (task: Task) => {
+        const index = taskList.findIndex(t => t.id === task.id);
+        const newList = [...taskList];
+        newList[index] = task;
+        setTaskList(newList);
+    };
+
     return (
         <div
             className="flex flex-col w-full h-full p-5 rounded-md"
@@ -56,14 +75,22 @@ const TaskList = () => {
                         </button>
                     </div>
                 </div>
-                <button className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue min-h-0 h-11 ml-auto">
+                <button
+                    className="btn bg-quick-blue hover:bg-quick-blue border-quick-blue hover:border-quick-blue min-h-0 h-11 ml-auto"
+                    onClick={addBlankTask}>
                     New Task
                 </button>
             </div>
             <div>
                 {taskList.length > 0 ? (
                     taskList.map(task => {
-                        return <TaskItem key={task.id} task={task} />;
+                        return (
+                            <TaskItem
+                                key={task.id}
+                                task={task}
+                                updateTask={addTasktoList}
+                            />
+                        );
                     })
                 ) : (
                     <Loading loadWhat={"tasks"} />

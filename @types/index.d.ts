@@ -26,6 +26,6 @@ declare type Task = {
     id: number;
     title: string;
     description: string;
-    deadline: Date;
+    deadline: Date?;
     completed: boolean;
 };

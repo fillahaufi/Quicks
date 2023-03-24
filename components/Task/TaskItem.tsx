@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 type Props = {
     task: Task;
+    updateTask?: (task: Task) => void;
 };
 
 const TaskItem: React.FC<Props> = props => {
     const [isComplete, setIsComplete] = React.useState(false);
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const [showOptions, setShowOptions] = React.useState(false);
+
+    useEffect(() => {
+        if (props.task.title === "") {
+            setIsCollapsed(false);
+        }
+    }, []);
 
     return (
         <div className="flex flex-col mt-4" data-theme="light">
@@ -20,14 +27,42 @@ const TaskItem: React.FC<Props> = props => {
                     onClick={e => e.stopPropagation()}
                     onChange={() => setIsComplete(!isComplete)}
                 />
-                <h1
-                    className={`font-bold flex-auto text-left ${
-                        isComplete
-                            ? "line-through font-normal text-quick-disabled"
-                            : ""
-                    }`}>
-                    {props.task.title}
-                </h1>
+                {props.task.title === "" ? (
+                    <input
+                        className={`input input-xs font-bold flex-auto text-left text-base ${
+                            isComplete
+                                ? "line-through font-normal text-quick-disabled"
+                                : ""
+                        } ${
+                            props.task.title === ""
+                                ? "input-bordered"
+                                : "input-ghost"
+                        }`}
+                        type="text"
+                        // value={}
+                        onClick={e => e.stopPropagation()}
+                        placeholder="Add a task"
+                        onChange={e => {
+                            props.task.title = e.target.value;
+                        }}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                props.updateTask &&
+                                    props.updateTask(props.task);
+                            }
+                        }}
+                    />
+                ) : (
+                    <h1
+                        className={`font-bold flex-auto text-left ${
+                            isComplete
+                                ? "line-through font-normal text-quick-disabled"
+                                : ""
+                        }`}>
+                        {props.task.title}
+                    </h1>
+                )}
                 <p
                     className={`min-w-fit text-red-600 ${
                         isComplete ? "invisible" : ""
@@ -35,9 +70,15 @@ const TaskItem: React.FC<Props> = props => {
                     <span>2</span> Days left
                 </p>
                 <p className="min-w-fit">
-                    {new Date(props.task.deadline).getDate()}/{""}
+                    {props.task.deadline &&
+                        new Date(props.task.deadline).getDate() +
+                            "/" +
+                            new Date(props.task.deadline).getMonth() +
+                            "/" +
+                            new Date(props.task.deadline).getFullYear()}
+                    {/* {new Date(props.task.deadline).getDate()}/{""}
                     {new Date(props.task.deadline).getMonth()}/{""}
-                    {new Date(props.task.deadline).getFullYear()}
+                    {new Date(props.task.deadline).getFullYear()} */}
                 </p>
                 <button
                     className="btn btn-circle bg-white hover:bg-white border-white hover:border-white min-h-0 h-6 w-5"
@@ -125,7 +166,21 @@ const TaskItem: React.FC<Props> = props => {
                         <input
                             type="date"
                             className="input input-bordered input-sm p-5 w-48"
-                            value={new Date(props.task.deadline).toISOString()}
+                            value={
+                                props.task.deadline
+                                    ? new Date(props.task.deadline)
+                                          .toISOString()
+                                          .slice(0, 10)
+                                    : ""
+                            }
+                            onChange={e => {
+                                if (props && props.updateTask) {
+                                    props.updateTask({
+                                        ...props.task,
+                                        deadline: new Date(e.target.value),
+                                    });
+                                }
+                            }}
                         />
                     </div>
                     <div className="flex flex-row items-center gap-5">
@@ -148,7 +203,15 @@ const TaskItem: React.FC<Props> = props => {
                             placeholder="No Description"
                             className="textarea textarea-ghost textarea-xs w-full max-w-xl"
                             rows={1}
-                            value={props.task.description}></textarea>
+                            value={props.task.description}
+                            onChange={(e: { target: { value: any } }) => {
+                                if (props && props.updateTask) {
+                                    props.updateTask({
+                                        ...props.task,
+                                        description: e.target.value,
+                                    });
+                                }
+                            }}></textarea>
                     </div>
                 </div>
             </div>
