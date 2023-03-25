@@ -82,7 +82,7 @@ const TaskList = () => {
                     New Task
                 </button>
             </div>
-            <div className="flex-auto overflow-y-auto">
+            <div className="flex-auto overflow-y-auto overflow-x-hidden">
                 {taskList.length > 0 ? (
                     taskList.map(task => {
                         return (

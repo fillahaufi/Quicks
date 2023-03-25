@@ -106,8 +106,8 @@ const StickerList: React.FC<Props> = props => {
     ]);
 
     useEffect(() => {
-        props.activeStickers && setStickerBorder();
-    }, [props.activeStickers]);
+        props.activeStickers ? setStickerBorder() : null;
+    });
 
     const setStickerBorder = () => {
         const newStickers = testingStickers.map(sticker => {
